@@ -1,11 +1,8 @@
-
-
 package main
 
-import (
-	"fmt"
-)
+import "github.com/TheLe0/f1-race-analysis/utils"
 
 func main() {
-	fmt.Println("Project started!")
+
+	utils.ParseFile("./data/log.txt")
 }
