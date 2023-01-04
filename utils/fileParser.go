@@ -21,7 +21,7 @@ func ParseFile(filePath string) [][]string {
 	fileScanner.Split(bufio.ScanLines)
 
 	for fileScanner.Scan() {
-		listString = append(listString, ParseLiner(fileScanner.Text()))
+		listString = append(listString, parseLine(fileScanner.Text()))
 	}
 
 	if err = file.Close(); err != nil {
@@ -31,7 +31,7 @@ func ParseFile(filePath string) [][]string {
 	return listString
 }
 
-func ParseLiner(line string) []string {
+func parseLine(line string) []string {
 
 	stringArray := strings.Split(line, ";")
 
