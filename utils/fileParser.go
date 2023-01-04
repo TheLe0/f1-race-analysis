@@ -3,16 +3,15 @@ package utils
 import (
 	"bufio"
 	"fmt"
-	"github.com/TheLe0/f1-race-analysis/types"
 	"os"
 	"strings"
 )
 
-func ParseFile(filePath string) []types.RacerInput {
+func ParseFile(filePath string) [][]string {
 
 	file, err := os.Open(filePath)
 
-	var racers []types.RacerInput
+	var listString [][]string
 
 	if err != nil {
 		fmt.Printf("Could not open the file due to this %s error \n", err)
@@ -21,37 +20,20 @@ func ParseFile(filePath string) []types.RacerInput {
 	fileScanner := bufio.NewScanner(file)
 	fileScanner.Split(bufio.ScanLines)
 
-	i := 0
-
 	for fileScanner.Scan() {
-		racers[i] = ParseLiner(fileScanner.Text())
-		i++
+		listString = append(listString, ParseLiner(fileScanner.Text()))
 	}
 
 	if err = file.Close(); err != nil {
 		fmt.Printf("Could not close the file due to this %s error \n", err)
 	}
 
-	return racers
+	return listString
 }
 
-func ParseLiner(line string) types.RacerInput {
+func ParseLiner(line string) []string {
 
-	line = strings.Replace(line, "\t\t", "–", -1)
-	line = strings.Replace(line, " – ", "–", -1)
-	line = strings.Replace(line, "\t\t\t", "–", -1)
-	line = strings.Replace(line, "\t", "–", -1)
+	stringArray := strings.Split(line, ";")
 
-	list := strings.Split(line, "–")
-
-	var input types.RacerInput
-
-	input.LocalTime = list[0]
-	input.Number = list[1]
-	input.Name = list[2]
-	input.LapNumber = list[3]
-	input.LapTime = list[4]
-	input.AverageLapSpeed = list[5]
-
-	return input
+	return stringArray
 }
