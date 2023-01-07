@@ -3,9 +3,10 @@ package types
 type Racer struct {
 	Name         string
 	Number       string
-	AverageSpeed uint16
+	AverageSpeed float32
 	Laps         uint8
-	FastestLap   uint16
-	StartTime    uint16
-	FinishTime   uint16
+	FastestLap   uint32
+	StartTime    uint32
+	FinishTime   uint32
+	TotalSpeed   uint32
 }
