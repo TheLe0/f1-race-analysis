@@ -1,18 +1,36 @@
 package commands
 
-import "github.com/TheLe0/f1-race-analysis/types"
+import (
+	"github.com/TheLe0/f1-race-analysis/configuration"
+	"github.com/TheLe0/f1-race-analysis/repository"
+	"github.com/TheLe0/f1-race-analysis/types"
+	"github.com/TheLe0/f1-race-analysis/utils"
+)
 
-func AnalyzeRace(input []types.RacerInput) {
+var appConfigs = *configuration.GetConfiguration()
 
-	var grid []types.Racer
+func loadData() []types.RacerInput {
+	fileParsed := utils.ParseFile(appConfigs.FilePath)
+	racersInput := ConvertToRacer(fileParsed)
+
+	return racersInput
+}
+
+func setupConfigurations(filePath string, totalRaceLaps uint8) {
+
+	appConfigs.FilePath = filePath
+	appConfigs.RaceLaps = totalRaceLaps
+}
+
+func AnalyzeRace(filePath string, totalRaceLaps uint8) {
+
+	setupConfigurations(filePath, totalRaceLaps)
+	input := loadData()
 
 	for _, line := range input {
 
-		var racer types.Racer
-
-		racer.Name = line.Name
-		racer.Number = line.Number
-
-		grid = append(grid, racer)
+		repository.UpsertRacerOnGrid(line)
 	}
+
+	ShowResults()
 }
