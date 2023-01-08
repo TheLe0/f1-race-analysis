@@ -43,3 +43,32 @@ Local Time        Racer                                   Lap             Lap Ti
 >In the file you must remove the header line.
 
 2. <b>Total number of laps on the race</b>: This is used to know if a racer ended or not the race. 
+
+![image](https://user-images.githubusercontent.com/40045069/211218380-25dec1c4-14fe-4bc4-81a9-f1c14218118b.png)
+
+## Output
+
+After the execution, is going to be printing something like this on the console:
+
+![image](https://user-images.githubusercontent.com/40045069/211218437-d9b41766-9278-48d0-bf46-351b61097ab7.png)
+
+## Configuration
+
+To run this application you can run it by Docker or with golang (you must have it installed on your machine).
+
+The commands to run by golang are:
+
+```bash
+go mod download
+go install
+go build
+
+./f1-race-analysis
+```
+
+Or by Docker:
+
+```bash
+docker build -t hangman:latest .
+docker run -it hangman:latest
+```
