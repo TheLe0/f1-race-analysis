@@ -7,7 +7,7 @@ This application analysis the results of a race by a log file containing each dr
 When the application statrts is going to be promped to inform a few information needed to
 perform the race log analysis:
 
-* <b>Path of the file</b>: Here you must inform where on your OS is stored the file that this application must analyze. 
+1. <b>Path of the file</b>: Here you must inform where on your OS is stored the file that this application must analyze. 
 
 The file must be with the following format:
 
@@ -41,3 +41,5 @@ Local Time        Racer                                   Lap             Lap Ti
 
 >Note:
 >In the file you must remove the header line.
+
+2. <b>Total number of laps on the race</b>: This is used to know if a racer ended or not the race. 
