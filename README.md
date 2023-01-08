@@ -12,7 +12,7 @@ perform the race log analysis:
 The file must be with the following format:
 
 ```text
-Local Time        Racer                                   Lap        Lap Time          Average Speed on the lap
+Local Time        Racer                                   Lap             Lap Time          Average Speed on the lap
 23:49:08.277      038 – F.MASSA                           1		1:02 852                        44,275
 23:49:10.858      033 – R.BARRICHELLO                     1		1:04.352                        43,243
 23:49:11.075      002 – K.RAIKKONEN                       1             1:04.108                        43,408
