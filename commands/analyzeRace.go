@@ -1,15 +1,14 @@
 package commands
 
 import (
-	"github.com/TheLe0/f1-race-analysis/configuration"
 	"github.com/TheLe0/f1-race-analysis/repository"
 	"github.com/TheLe0/f1-race-analysis/types"
 	"github.com/TheLe0/f1-race-analysis/utils"
 )
 
-var appConfigs = *configuration.GetConfiguration()
-
 func loadData() []types.RacerInput {
+	var appConfigs = repository.GetConfigs()
+
 	fileParsed := utils.ParseFile(appConfigs.FilePath)
 	racersInput := ConvertToRacer(fileParsed)
 
@@ -18,8 +17,7 @@ func loadData() []types.RacerInput {
 
 func setupConfigurations(filePath string, totalRaceLaps uint8) {
 
-	appConfigs.FilePath = filePath
-	appConfigs.RaceLaps = totalRaceLaps
+	repository.CreateConfiguration(filePath, totalRaceLaps)
 }
 
 func AnalyzeRace(filePath string, totalRaceLaps uint8) {

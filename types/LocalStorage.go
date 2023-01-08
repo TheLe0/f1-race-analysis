@@ -1,5 +1,6 @@
 package types
 
 type LocalStorage struct {
-	Grid []Racer
+	Grid    []Racer
+	Configs Configuration
 }

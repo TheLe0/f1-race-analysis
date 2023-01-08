@@ -1,27 +1,38 @@
 package repository
 
 import (
-	"github.com/TheLe0/f1-race-analysis/configuration"
+	"fmt"
 	"github.com/TheLe0/f1-race-analysis/infrastructure"
 	"github.com/TheLe0/f1-race-analysis/types"
 	"github.com/TheLe0/f1-race-analysis/utils"
+	"strconv"
 )
 
 var localStorage = *infrastructure.GetInstance()
 var grid = localStorage.Grid
-var appConfigs = *configuration.GetConfiguration()
 
-func FindByRacerNumber(racerNumber string) *types.Racer {
-
-	var foundRacer *types.Racer = nil
+func FindByRacerNumber(racerNumber string) (types.Racer, bool) {
 
 	for _, racer := range grid {
 		if racer.Number == racerNumber {
-			foundRacer = &racer
+			return racer, true
 		}
 	}
 
-	return foundRacer
+	return types.Racer{}, false
+}
+
+func DeleteByRacerNumber(racerNumber string) {
+
+	var newGrid []types.Racer
+
+	for _, racer := range grid {
+		if racer.Number != racerNumber {
+			newGrid = append(newGrid, racer)
+		}
+	}
+
+	grid = newGrid
 }
 
 func insertRacer(racerInput types.RacerInput) {
@@ -42,26 +53,70 @@ func updateRacer(racer types.Racer, racerInput types.RacerInput) {
 
 	racer.Laps = utils.ParseStringToUint8(racerInput.LapNumber)
 	racer.TotalSpeed += utils.ParseSpeedString(racerInput.AverageLapSpeed)
+	racer.AverageSpeed = float32(racer.TotalSpeed) / float32(racer.Laps)
 
 	currentLapTime := utils.ParseLapTimeStringToMilliseconds(racerInput.LapTime)
 
-	if racer.FastestLap <= currentLapTime {
+	if racer.FastestLap >= currentLapTime {
 		racer.FastestLap = currentLapTime
 	}
 
-	if appConfigs.RaceLaps == racer.Laps {
+	if GetConfigs().RaceLaps == racer.Laps {
 		racer.FinishTime = utils.ParseTimeStringToMilliseconds(racerInput.LocalTime)
-		racer.AverageSpeed = float32(racer.TotalSpeed) / float32(racer.Laps)
 	}
+
+	DeleteByRacerNumber(racer.Number)
+	grid = append(grid, racer)
 }
 
 func UpsertRacerOnGrid(racerInput types.RacerInput) {
 
-	racer := FindByRacerNumber(racerInput.Number)
+	racer, alreadyExists := FindByRacerNumber(racerInput.Number)
 
-	if racer != nil {
-		updateRacer(*racer, racerInput)
+	if alreadyExists {
+		updateRacer(racer, racerInput)
 	} else {
 		insertRacer(racerInput)
 	}
+}
+
+func GetAllRacersFormatted() []types.RacerOutput {
+
+	var gridFormatted []types.RacerOutput
+	var difference uint32 = 0
+	var lastDuration uint32 = 0
+
+	for index, racer := range grid {
+
+		var row types.RacerOutput
+
+		if GetConfigs().RaceLaps == racer.Laps {
+			durationTime := racer.FinishTime - racer.StartTime
+
+			if index == 0 {
+				difference = 0
+				lastDuration = durationTime
+			} else {
+				difference += durationTime - lastDuration
+				lastDuration = durationTime
+			}
+
+			row.TotalRacingTime = fmt.Sprintf("%s", utils.ParseMillisecondsToTimeString(durationTime))
+			row.Difference = fmt.Sprintf("%s", utils.ParseMillisecondsToTimeString(difference))
+
+		} else {
+			row.TotalRacingTime = fmt.Sprintf("Not Completed")
+			row.Difference = fmt.Sprintf("Not Completed")
+		}
+
+		row.Position = strconv.Itoa(index + 1)
+		row.Racer = fmt.Sprintf("%s - %s", racer.Number, racer.Name)
+		row.TotalLaps = fmt.Sprintf("%d", racer.Laps)
+		row.FastestLap = fmt.Sprintf("%s", utils.ParseMillisecondsToLapTimeString(racer.FastestLap))
+		row.AverageSpeed = fmt.Sprintf("%s", utils.ParseSpeedToString(racer.AverageSpeed))
+
+		gridFormatted = append(gridFormatted, row)
+	}
+
+	return gridFormatted
 }
