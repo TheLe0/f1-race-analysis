@@ -2,10 +2,11 @@ package repository
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/TheLe0/f1-race-analysis/infrastructure"
 	"github.com/TheLe0/f1-race-analysis/types"
 	"github.com/TheLe0/f1-race-analysis/utils"
-	"strconv"
 )
 
 var localStorage = *infrastructure.GetInstance()
@@ -78,6 +79,24 @@ func UpsertRacerOnGrid(racerInput types.RacerInput) {
 	} else {
 		insertRacer(racerInput)
 	}
+}
+
+func GetFastestLapFormatted() string {
+
+	var fastestRacer types.Racer
+	fastestRacer.FastestLap = 0
+
+	for index, racer := range grid {
+
+		if fastestRacer.FastestLap > racer.FastestLap || index == 0 {
+			fastestRacer = racer
+		}
+	}
+
+	return fmt.Sprintf("%s - %s: %s",
+		fastestRacer.Number,
+		fastestRacer.Name,
+		utils.ParseMillisecondsToLapTimeString(fastestRacer.FastestLap))
 }
 
 func GetAllRacersFormatted() []types.RacerOutput {
