@@ -50,7 +50,7 @@ Local Time        Racer                                   Lap             Lap Ti
 
 After the execution, is going to be printing something like this on the console:
 
-![image](https://user-images.githubusercontent.com/40045069/211218437-d9b41766-9278-48d0-bf46-351b61097ab7.png)
+![image](https://user-images.githubusercontent.com/40045069/220788885-dd1aef73-1277-4071-b608-7156a0fa427f.png)
 
 ## Configuration
 
@@ -69,6 +69,6 @@ go build
 Or by Docker:
 
 ```bash
-docker build -t hangman:latest .
-docker run -it hangman:latest
+docker build -t f1-race-analysis:latest .
+docker run -it f1-race-analysis:latest
 ```
