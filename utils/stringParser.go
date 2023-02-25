@@ -11,7 +11,8 @@ func ParseStringToUint8(input string) uint8 {
 	valInt, err := strconv.Atoi(input)
 
 	if err != nil {
-		fmt.Printf("Could not cast the %s string input into uint8 type due to this %s error \n", input, err)
+		fmt.Printf("Could not cast the %s string input into uint8 type due to the following error \n", input)
+		panic(err)
 	}
 
 	return uint8(valInt)
@@ -22,7 +23,8 @@ func ParseStringToUint32(input string) uint32 {
 	valInt, err := strconv.Atoi(input)
 
 	if err != nil {
-		fmt.Printf("Could not cast the %s string input into uint8 type due to this %s error \n", input, err)
+		fmt.Printf("Could not cast the %s string input into uint8 type due to the following error \n", input)
+		panic(err)
 	}
 
 	return uint32(valInt)
