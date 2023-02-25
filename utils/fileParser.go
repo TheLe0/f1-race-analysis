@@ -14,7 +14,8 @@ func ParseFile(filePath string) [][]string {
 	var listString [][]string
 
 	if err != nil {
-		fmt.Printf("Could not open the file due to this %s error \n", err)
+		fmt.Printf("Could not open the file due to the following error \n")
+		panic(err)
 	}
 
 	fileScanner := bufio.NewScanner(file)
@@ -25,7 +26,8 @@ func ParseFile(filePath string) [][]string {
 	}
 
 	if err = file.Close(); err != nil {
-		fmt.Printf("Could not close the file due to this %s error \n", err)
+		fmt.Printf("Could not close the file due to the following error \n")
+		panic(err)
 	}
 
 	return listString
